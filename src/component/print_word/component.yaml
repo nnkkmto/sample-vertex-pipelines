@@ -1,0 +1,14 @@
+name: Print Word
+description: print word
+
+inputs:
+- name: word
+  type: String
+  description: word to print
+
+implementation:
+  container:
+    image: asia.gcr.io/{project_id}/sample-script-print-word:latest
+    args: [
+      --word, {inputValue: word},
+    ]

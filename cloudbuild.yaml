@@ -1,0 +1,48 @@
+steps:    
+  # components
+  # split_sentence
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+        'build',
+        '-f', './images/component/Dockerfile',
+        '--build-arg', 'COMPONENT=split_sentence', 
+        '-t', 'asia.gcr.io/$PROJECT_ID/sample-script-split-sentence:latest',
+        '.'
+    ]
+    id: Build Component Image split_sentence
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia.gcr.io/$PROJECT_ID/sample-script-split-sentence:latest']
+    id: Push Component Image split_sentence
+
+  # print_word
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+        'build',
+        '-f', './images/component/Dockerfile',
+        '--build-arg', 'COMPONENT=print_word', 
+        '-t', 'asia.gcr.io/$PROJECT_ID/sample-script-print-word:latest',
+        '.'
+    ]
+    id: Build Component Image print_word
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia.gcr.io/$PROJECT_ID/sample-script-print-word:latest']
+    id: Push Component Image print_word
+
+  # pipeline
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+        'build',
+        '-f', './images/pipeline-builder/Dockerfile',
+        '--build-arg', 'PROJECT_ID=$PROJECT_ID',
+        '-t', 'asia.gcr.io/$PROJECT_ID/pipeline-builder:latest',
+        '.'
+    ]
+    id: Build Pipeline Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia.gcr.io/$PROJECT_ID/pipeline-builder:latest']
+    id: Push Pipeline Builder Image
+  - name: 'asia.gcr.io/$PROJECT_ID/pipeline-builder:latest'
+    entrypoint: 'python'
+    args: ['pipeline/pipeline.py']
+    dir: src
+    id: 

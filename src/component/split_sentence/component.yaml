@@ -1,0 +1,20 @@
+name: Split Sentence
+description: split sentence into words
+
+inputs:
+- name: sentence
+  type: String
+  description: sentence to split
+
+outputs:
+- name: words
+  type: List
+  description: split words from sentence
+
+implementation:
+  container:
+    image: asia.gcr.io/{project_id}/sample-script-split-sentence:latest
+    args: [
+      --sentence, {inputValue: sentence},
+      --words_output_path, {outputPath: words},
+    ]
